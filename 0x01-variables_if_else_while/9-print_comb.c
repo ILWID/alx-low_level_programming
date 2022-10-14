@@ -1,23 +1,24 @@
 #include <stdio.h>
 
 /**
- * main - print all the numbers of base 16 in lowercase
+ * main - print commbination of two single digit numbers
  *
  * Description: using the main function
- * this program prints "0123456789abcdef
+ * this program prints "0, 1, 2, 3, 4, 5, 6, 7, 8, 9
  * Return: 0
  */
 int main(void)
 {
-	char n;
+	int c;
 
-	for (n = '0' ; n <= '9' ; n++)
+	for (c = '0' ; c <= '9' ; c++)
 	{
-		putchar(n);
-	}
-	for (n = 'a' ; n <= 'f' ; n++)
-	{
-		putchar(n);
+		putchar(c);
+		if (c != '9')
+		{
+			putchar(',');
+			putchar(' ');
+		}
 	}
 	putchar('\n');
 	return (0);

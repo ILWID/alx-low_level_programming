@@ -1,23 +1,30 @@
 #include <stdio.h>
 
 /**
- * main - print commbination of two single digit numbers
+ * main - prints all possible different combinations of two digits
  *
  * Description: using the main function
- * this program prints "0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+ * this program print "01, 02, 03, 04, 05, 06, 07, 08, 09, 12, 13, 14, 15, ...
  * Return: 0
  */
 int main(void)
 {
-	int c;
+	int i, j;
 
-	for (c = '0' ; c <= '9' ; c++)
+	for (i = 0 ; i <= 9 ; i++)
 	{
-		putchar(c);
-		if (c != '9')
+		for (j = 1 ; j <= 9 ; j++)
 		{
-			putchar(',');
-			putchar(' ');
+			if (j > i)
+			{
+				putchar(i + '0');
+				putchar(j + '0');
+				if (i != 8)
+				{
+					putchar(',');
+					putchar(' ');
+				}
+			}
 		}
 	}
 	putchar('\n');

@@ -1,28 +1,32 @@
 #include <stdio.h>
 
 /**
- * main - prints all possible different combinations of two digits
+ * main - print all possible different combinations of three digits
  *
  * Description: using the main function
- * this program print "01, 02, 03, 04, 05, 06, 07, 08, 09, 12, 13, 14, 15, ...
+ * this program prints "012, 013, 014, 015, 016, 017, 018, 019, 023, ...
  * Return: 0
  */
 int main(void)
 {
-	int i, j;
+	int i, p, m;
 
 	for (i = 0 ; i <= 9 ; i++)
 	{
-		for (j = 1 ; j <= 9 ; j++)
+		for (p = 1 ; p <= 9 ; p++)
 		{
-			if (j > i)
+			for (m = 2 ; m <= 9 ; m++)
 			{
-				putchar(i + '0');
-				putchar(j + '0');
-				if (i != 8)
+				if (m > p && p > i)
 				{
-					putchar(',');
-					putchar(' ');
+					putchar(i + '0');
+					putchar(p + '0');
+					putchar(m + '0');
+					if (i != 7)
+					{
+						putchar(',');
+						putchar(' ');
+					}
 				}
 			}
 		}
