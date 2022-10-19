@@ -1,21 +1,10 @@
 #include "main.h"
-
 /**
- * _abs - computes the absolute value of the integer
- * @c The integer to be complete
- * Retrun the absolute value
+ * _abs - a function that computes the absolute value of an integer
+ * @ab: integer input
+ * Return: Absolute value of ab
  */
-
-int _abs (int t)
+int _abs(int ab)
 {
-	(return x >= 0 ? x : -x);
-}
-
-
-int main(void)
-{
-	int N;
-
-	scanf("%d", &N);
-	putchar("%d", abs(N));
+	return (ab * ((ab > 0) - (ab < 0)));
 }
