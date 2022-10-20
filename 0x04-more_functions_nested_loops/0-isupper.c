@@ -1,7 +1,7 @@
 #include "main.h"
 
 /**
- * _isupper - function that checks for upperharcater
+ * _isupper - checks if it is a upperharcater
  * @c: The input character to check
  * Return: 1  if it is , 0 otherwise (success)
  */
