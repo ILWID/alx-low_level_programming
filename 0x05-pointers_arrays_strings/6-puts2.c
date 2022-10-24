@@ -10,7 +10,7 @@ void puts2(char *str)
 {
 	int i = 0;
 
-	while (str[i] != '\n' && str[i] != '\0')
+	while ((i % 2 == 0) && str[i] != '\0')
 	{
 		putchar(str[i]);
 		i++;
