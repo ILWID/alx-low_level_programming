@@ -1,20 +1,21 @@
 #include "main.h"
 
 /**
- * _strlen_recursion - returns lenght of a string
- * @s: pointer to string
+ * _pow_recursion - returns the value of x to the power of y
+ * @x: number
+ * @y: power
  *
- * Return: lenght of string
+ * Return: x to the pow of y
+ * -1 if x < 0
  */
 
-int _strlen_recursion(char *s)
+int _pow_recursion(int x, int y)
 {
-	if (*s)
-	{
-		return (1 + _strlen_recursion(s + 1));
-	}
-	else
-	{
-		return (0);
-	}
+	if (y < 0)
+		return (-1);
+	if (y == 0)
+		return (1);
+	if (y == 1)
+		return (x);
+	return (x * _pow_recursion(x, y - 1));
 }
