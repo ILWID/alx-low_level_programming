@@ -9,4 +9,4 @@ int int_index(int *array, int size, int (*cmp)(int));
 int _putchar(char c);
 int (*get_op_func(char *s))(int, int);
 
-#endif MAIN_H
+#endif
