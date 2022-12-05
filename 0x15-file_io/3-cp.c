@@ -1,103 +1,83 @@
 #include "main.h"
-#include <stdio.h>
-#include <stdlib.h>
 
-char *create_buffer(char *file);
-void close_file(int fd);
+void free_close(char **buf, int *fd1, int *fd2);
 
 /**
- * create_buffer - Allocates 1024 bytes for a buffer.
- * @file: The name of the file buffer is storing chars for.
- *
- * Return: A pointer to the newly-allocated buffer.
- */
-char *create_buffer(char *file)
-{
-	char *buffer;
-
-	buffer = malloc(sizeof(char) * 1024);
-
-	if (buffer == NULL)
-	{
-		dprintf(STDERR_FILENO,
-			"Error: Can't write to %s\n", file);
-		exit(99);
-	}
-
-	return (buffer);
-}
-
-/**
- * close_file - Closes file descriptors.
- * @fd: The file descriptor to be closed.
- */
-void close_file(int fd)
-{
-	int c;
-
-	c = close(fd);
-
-	if (c == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
-		exit(100);
-	}
-}
-
-/**
- * main - Copies the contents of a file to another file.
- * @argc: The number of arguments supplied to the program.
- * @argv: An array of pointers to the arguments.
- *
- * Return: 0 on success.
- *
- * Description: If the argument count is incorrect - exit code 97.
- *              If file_from does not exist or cannot be read - exit code 98.
- *              If file_to cannot be created or written to - exit code 99.
- *              If file_to or file_from cannot be closed - exit code 100.
- */
+* main - a program that copies the content of a file to anothe file
+* @argc: the number of cmd-line arguments
+* @argv: argv[1] (source file), argv[2] (destination file)
+* Return: returns (0) success, exits on error
+*/
 int main(int argc, char *argv[])
 {
-	int from, to, r, w;
-	char *buffer;
+	int i = 0;
+	int n, n1, fd_from, fd_to, *fd1_ptr = &fd_from, *fd2_ptr = &fd_to;
+	char *buf, **buf_ptr = &buf;
 
 	if (argc != 3)
 	{
 		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
 		exit(97);
 	}
-
-	buffer = create_buffer(argv[2]);
-	from = open(argv[1], O_RDONLY);
-	r = read(from, buffer, 1024);
-	to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
+	fd_from = open(argv[1], O_RDONLY);
+	if (fd_from == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
+		exit(98);
+	}
+	fd_to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
+	if (fd_to == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]);
+		exit(99);
+	}
+	buf = malloc(sizeof(char) * 1024);
+	if (!buf)
+		return (-1);
 
 	do {
-		if (from == -1 || r == -1)
+		n = read(fd_from, buf, 1024);
+		if (n == -1)
 		{
-			dprintf(STDERR_FILENO,
-				"Error: Can't read from file %s\n", argv[1]);
-			free(buffer);
+			dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
 			exit(98);
 		}
-
-		w = write(to, buffer, r);
-		if (to == -1 || w == -1)
+		n1 = write(fd_to, buf, n);
+		if (n1 != n)
 		{
-			dprintf(STDERR_FILENO,
-				"Error: Can't write to %s\n", argv[2]);
-			free(buffer);
+			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]);
 			exit(99);
 		}
+		i++;
+	} while (n == 1024);
 
-		r = read(from, buffer, 1024);
-		to = open(argv[2], O_WRONLY | O_APPEND);
-
-	} while (r > 0);
-
-	free(buffer);
-	close_file(from);
-	close_file(to);
+	free_close(buf_ptr, fd1_ptr, fd2_ptr);
 
 	return (0);
+}
+
+/**
+* free_close - free malloc'd memory and closes opened files
+* @buf: pointer to the string buf
+* @fd1: pointer to the fd_from
+* @fd2: pointer to fd_to
+* Return: returns nothing
+*/
+void free_close(char **buf, int *fd1, int *fd2)
+{
+	int n, n1;
+
+	free(*buf);
+	n = close(*fd1);
+	if (n == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", *fd1);
+		exit(100);
+	}
+	n1 = close(*fd2);
+	if (n1 == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", *fd2);
+		exit(100);
+	}
 }
